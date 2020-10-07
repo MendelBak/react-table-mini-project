@@ -54,6 +54,10 @@ const EditableCell = ({
     setValue(e.target.value);
   };
 
+  function test() {
+    setValue('');
+  }
+
   // // We'll only update the external data when the input is blurred
   // const onBlur = () => {
   //   updateMyData(index, id, value);
@@ -65,8 +69,9 @@ const EditableCell = ({
   // }, [initialValue]);
 
   return (
-    <div className='ui transparent icon input'>
-      <input type='text' value={value} onChange={onChange} />
+    <div className='ui transparent fluid icon input'>
+      <input type='text' value={value} onChange={onChange}/>
+      <i className='delete link icon' onClick={test}></i>
     </div>
   );
 };
@@ -124,14 +129,6 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
     textOverflow: 'ellipsis',
   };
 
-  function clearCellData(cell) {
-    var x = cell.getCellProps();
-    console.log(x);
-    console.log(cell.value);
-    cell.initialValue = '';
-    cell.value = '';
-  }
-
   // const calculateStyle = (cell) => {
   //   console.log(cell)
 
@@ -173,10 +170,6 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
                       {...cell.getCellProps()}
                     >
                       {cell.render('Cell')}
-                      <i
-                        className='delete icon'
-                        onClick={() => clearCellData(cell)}
-                      ></i>
                     </td>
                   );
                 })}
