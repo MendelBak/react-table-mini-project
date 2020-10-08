@@ -1,7 +1,10 @@
-import React, { Component, useState, useReducer } from 'react';
+import React, { Component, useState } from 'react';
 import styled from 'styled-components';
-import { useTable, useRowState } from 'react-table';
-import {} from 'semantic-ui-react';
+import { useTable } from 'react-table';
+import SlidingSidebar from './SlidingSidebar';
+import Card from './Card';
+
+import { Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react';
 
 import makeData from './makeData';
 
@@ -32,7 +35,7 @@ const Styles = styled.div`
       }
 
       input {
-        font-size: 1rem;
+        font-size: rem;
         padding: 0;
         margin: 0;
         border: 0;
@@ -46,7 +49,6 @@ const EditableCell = ({
   value: initialValue,
   row: { index },
   column: { id },
-  updateMyData,
 }) => {
   const [value, setValue] = React.useState(initialValue);
 
@@ -54,24 +56,34 @@ const EditableCell = ({
     setValue(e.target.value);
   };
 
-  function test() {
+  function clearInputValue() {
     setValue('');
   }
 
-  // // We'll only update the external data when the input is blurred
-  // const onBlur = () => {
-  //   updateMyData(index, id, value);
-  // };
+  const [sidebarVisible, setSidebarVisible] = React.useState(false);
 
-  // // If the initialValue is changed external, sync it up with our state
-  // React.useEffect(() => {
-  //   setValue(initialValue);
-  // }, [initialValue]);
+  function openSlidingSidebar() {
+    console.log('asdfjlhaslkdj');
+    setSidebarVisible(true);
+  }
 
   return (
-    <div className='ui transparent fluid icon input'>
-      <input type='text' value={value} onChange={onChange}/>
-      <i className='delete link icon' onClick={test}></i>
+    <div className='ui transparent fluid left icon input '>
+      <i
+        className='expand arrows alternate link icon'
+        onClick={openSlidingSidebar}
+      ></i>
+      <input
+        type='text'
+        value={value}
+        onChange={onChange}
+        style={{ maxWidth: '90%' }}
+      />
+      <i
+        className='delete link icon'
+        style={{ left: 'auto', right: '1px' }}
+        onClick={clearInputValue}
+      ></i>
     </div>
   );
 };
@@ -88,58 +100,21 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
     headerGroups,
     prepareRow,
     rows,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultColumn,
-      // use the skipPageReset option to disable page resetting temporarily
-      autoResetPage: !skipPageReset,
-      // updateMyData isn't part of the API, but
-      // anything we put into these options will
-      // automatically be available on the instance.
-      // That way we can call this function from our
-      // cell renderer!
-      updateMyData,
-    },
-    useRowState
-  );
+  } = useTable({
+    columns,
+    data,
+    defaultColumn,
+  });
 
-  // const [truncateStyle, toggleTruncateStyle] = useState(true);
-  // HACK: This is a hack to force update the component after cell.state.truncate has changed. There is much better ways to do this (like modifying state), but this works for the example project.
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
-
-  function toggleTruncate(cell) {
-    console.log(cell.state);
-    // console.log(e.target);
-    // console.log(cell.getCellProps());
-    // console.log(cell.row.id)
-    // console.log(cell.column.id)
-    cell.state.truncate = !cell.state.truncate;
-    // HACK: See above comment.
-    // forceUpdate();
-    console.log(cell.state);
-  }
-
-  const textStyle = {
-    // display: 'inline-block',
-    maxWidth: '150px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  };
-
-  // const calculateStyle = (cell) => {
-  //   console.log(cell)
-
-  //   // if (cell.state.truncate) {
-  //     // return textStyle;
-  //   // }
-  //   // return null;
-  // }
 
   return (
     <>
+      <Card />
+
+      <div className='ui basic center aligned segment'>
+        <div className='ui horizontal divider'>Data Table</div>
+      </div>
+
       <table {...getTableProps()} className='ui celled table'>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -156,21 +131,8 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
-                  {
-                    /* Problem: every rerender this gets reset to all true. */
-                  }
-                  {
-                    /* cell.state.truncate = true; */
-                  }
                   return (
-                    <td
-                      // onClick={() => toggleTruncate(cell)}
-                      // onClick={(event) => toggleTruncate(event, cell)}
-                      // style={cell.state.truncate ? textStyle : null}
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render('Cell')}
-                    </td>
+                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   );
                 })}
               </tr>
@@ -178,11 +140,6 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
           })}
         </tbody>
       </table>
-
-      {/* <p onClick={toggleTruncate} style={calculateStyle()}>
-        'Hello world. Please come again enext asldkjfahsdl kfjhasd lfkjah
-        sdkfljash dflkjs'
-      </p> */}
     </>
   );
 }
@@ -228,59 +185,33 @@ function App() {
     []
   );
 
-  const [data, setData] = React.useState(() => makeData(20));
-  const [originalData] = React.useState(data);
-  const [skipPageReset, setSkipPageReset] = React.useState(false);
-
-  // We need to keep the table from resetting the pageIndex when we
-  // Update data. So we can keep track of that flag with a ref.
-
-  // When our cell renderer calls updateMyData, we'll use
-  // the rowIndex, columnId and new value to update the
-  // original data
-  const updateMyData = (rowIndex, columnId, value) => {
-    // We also turn on the flag to not reset the page
-    setSkipPageReset(true);
-    setData((old) =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...old[rowIndex],
-            [columnId]: value,
-          };
-        }
-        return row;
-      })
-    );
-  };
-
-  // After data changes, we turn the flag back off
-  // so that if data actually changes when we're not
-  // editing it, the page is reset
-  React.useEffect(() => {
-    setSkipPageReset(false);
-  }, [data]);
-
-  // Let's add a data resetter/randomizer to help
-  // illustrate that flow...
-  const resetData = () => setData(originalData);
+  const [data] = React.useState(() => makeData(20));
 
   return (
-    <Styles>
-      <button onClick={resetData}>Reset Data</button>
-      <Table
-        columns={columns}
-        data={data}
-        updateMyData={updateMyData}
-        skipPageReset={skipPageReset}
+    <>
+      <div>
+        <h1 className='ui inverted segment centered header brown'>
+          מנחם באקלייניק - ICTBIT
+        </h1>
+      </div>
+
+      <SlidingSidebar
+        visible={true}
+        direction={'right'}
+        width={'very wide'}
+        // animation={'scale down'}
       />
-    </Styles>
+
+      <Styles>
+        <Table columns={columns} data={data} />
+      </Styles>
+    </>
   );
 }
 
 export default App;
 
-// class App extends Component {
+// className App extends Component {
 //   constructor(props) {
 //     super(props);
 
