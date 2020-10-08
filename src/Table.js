@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTable } from 'react-table';
-import TableAccordion from './TableAccordion';
 import Card from './Card';
 
 const EditableCell = ({
@@ -16,13 +15,6 @@ const EditableCell = ({
 
   function clearInputValue() {
     setValue('');
-  }
-
-  // const [showSidebar, setShowSidebar] = React.useState(false);
-
-  function openSlidingSidebar() {
-    // console.log(props.showSidebar);
-    // setShowSidebar(true);
   }
 
   return (
@@ -60,13 +52,6 @@ export default function Table({ columns, data, showSidebar, toggleSidebar }) {
     data,
     defaultColumn,
   });
-
-  function openTableAccordion() {}
-
-  function openSlidingSidebar() {
-    console.log('test');
-    // toggleSidebar;
-  }
 
   return (
     <>
@@ -116,10 +101,7 @@ export default function Table({ columns, data, showSidebar, toggleSidebar }) {
                 {row.cells.map((cell) => {
                   return (
                     <>
-                      <td {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                        {/* <TableAccordion /> */}
-                      </td>
+                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     </>
                   );
                 })}

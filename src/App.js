@@ -1,21 +1,10 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import SlidingSidebar from './SlidingSidebar';
 import Table from './Table';
 
 import makeData from './makeData';
-import {
-  Sidebar,
-  SidebarPusher,
-  Menu,
-  Checkbox,
-  Dimmer,
-  Grid,
-  Header,
-  Icon,
-  Image,
-  Segment,
-} from 'semantic-ui-react';
+import { Sidebar } from 'semantic-ui-react';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -53,73 +42,6 @@ const Styles = styled.div`
   }
 `;
 
-// function App() {
-//   const columns = React.useMemo(
-//     () => [
-//       {
-//         Header: 'Name',
-//         columns: [
-//           {
-//             Header: 'First Name',
-//             accessor: 'firstName',
-//           },
-//           {
-//             Header: 'Last Name',
-//             accessor: 'lastName',
-//           },
-//         ],
-//       },
-//       {
-//         Header: 'Info',
-//         columns: [
-//           {
-//             Header: 'Age',
-//             accessor: 'age',
-//           },
-//           {
-//             Header: 'Visits',
-//             accessor: 'visits',
-//           },
-//           {
-//             Header: 'Status',
-//             accessor: 'status',
-//           },
-//           {
-//             Header: 'Profile Progress',
-//             accessor: 'progress',
-//           },
-//         ],
-//       },
-//     ],
-//     []
-//   );
-
-//   const [data] = React.useState(() => makeData(20));
-
-//   return (
-//     <>
-//       <div>
-//         <h1 className='ui inverted segment centered header brown'>
-//           מנחם באקלייניק - ICTBIT
-//         </h1>
-//       </div>
-
-//       <SlidingSidebar
-//         visible={false}
-//         direction={'right'}
-//         width={'very wide'}
-//         // animation={'scale down'}
-//       />
-
-//       <Styles>
-//         <Table columns={columns} data={data} />
-//       </Styles>
-//     </>
-//   );
-// }
-
-// export default App;
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -146,7 +68,6 @@ class App extends Component {
         sidebarContent: content,
       });
     }
-    console.log(content[1].value);
 
     this.setState({
       showSidebar: !this.state.showSidebar,
@@ -201,23 +122,6 @@ class App extends Component {
             accessor: 'analysisResponse',
           },
         ],
-        // },
-        // {
-        //   Header: 'Info',
-        //   columns: [
-        //     {
-        //       Header: 'Random Number',
-        //       accessor: 'age',
-        //     },
-        //     {
-        //       Header: 'Visits',
-        //       accessor: 'visits',
-        //     },
-        //     {
-        //       Header: 'Profile Progress',
-        //       accessor: 'progress',
-        //     },
-        //   ],
       },
     ];
 
@@ -228,28 +132,27 @@ class App extends Component {
             מנחם באקלייניק - ICTBIT
           </h1>
         </div>
-        {/* <Sidebar.Pushable> */}
-        <SlidingSidebar
-          visible={this.state.showSidebar}
-          direction={'right'}
-          width={'wide'}
-          hideSidebar={this.hideSidebar}
-          sidebarContent={this.state.sidebarContent}
-          clearRowData={this.clearRowData}
-        />
+        <Sidebar.Pushable>
+          <SlidingSidebar
+            visible={this.state.showSidebar}
+            direction={'right'}
+            width={'wide'}
+            hideSidebar={this.hideSidebar}
+            sidebarContent={this.state.sidebarContent}
+            clearRowData={this.clearRowData}
+          />
 
-        <Sidebar.Pusher dimmed={true}>
-          {/* <Sidebar.Pusher dimmed={true}> */}
-          <Styles>
-            <Table
-              columns={columns}
-              data={this.state.data}
-              showSidebar={this.state.showSidebar}
-              toggleSidebar={this.toggleSidebar}
-            />
-          </Styles>
-        </Sidebar.Pusher>
-        {/* </Sidebar.Pushable> */}
+          <Sidebar.Pusher dimmed={this.state.showSidebar}>
+            <Styles>
+              <Table
+                columns={columns}
+                data={this.state.data}
+                showSidebar={this.state.showSidebar}
+                toggleSidebar={this.toggleSidebar}
+              />
+            </Styles>
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
       </>
     );
   }
