@@ -1,68 +1,39 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
-
-In the project directory, you can run:
-
 ### `npm start`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Text truncation using ellipses.
 
-### `npm test`
+The best way to do text truncation is using the 'line-clamp' css property. However, it is not officially part of the CSS spec, so no browsers (other than Opera, I think) support it. I found a way to use it anyway, using -webkit. There are also some NPM packages which perform text truncation. I initially thought to truncate and expand individual cells in the table, but realized this was a bad idea. To expand an individual cell would make the rest of the table look really bad, with lots of empty space and a very confused UI. So, I decided to rethink how to display cell data, but kept my text truncation feature as a small card on top of the page. I could add more features to it, like a "read more" / "read less" button, but decided to focus on other tasks.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Semantic UI
 
-### `npm run build`
+I spent most of my time working with plain HTML and React, and only added Semantic UI towards the end. I realized that I really wanted some features it had, to display cell/row data more intuitively. Building those features from scratch (like a sidebar) would take longer and not look as good.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Semantic UI has some issues with its documentation (for example, sidebars pushers were not explained well and were tricky to figure out), but it is a very nice framework.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## react-table
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+I spent a majority of my time figuring out how react-table works. It was trick to understand at first, but I have gained a much better understanding of it, after working with it for a day. I liked some of their Hooks useful, like the rowState Hook, which adds a state object to a row, although I ended up not using it after all.
 
-### `npm run eject`
+One thing I didn't like so much about the library is that, due to its heavy usage of Hooks, I'm required to use a lot of function components versus stateful components. This caused me a lot of issues when state management became more necessary. I didn't want to fiddle with a state management library like Redux or Mobix, so I had to deal with it.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Data Display
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+I spent a lot of time thinking of how to display cell and row data nicely. I found some nice resources like https://medium.com/nextux/design-better-data-tables-4ecc99d23356 and https://medium.com/design-with-figma/the-ultimate-guide-to-designing-data-tables-7db29713a85a which helped me think of different strategies to design a solution.
+I decided, as I mentioned above, to avoid individual cell expansion (even though I spent a fair bit of time on it) and instead brought in Semantic UI to help. I thought of two solutions, 1: A sidebar which would display the data from a single cell (if the application has very large amounts of data in a single cell). Users would be able to modify or delete the data in that sidebar. 2: An accordion dropdown underneath each row (master/detail component) that would present the row in more detail.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+I spent some time fiddling with the Accordion component from SUI, trying to use that as a dropdown for the row detail expansion, but realized that it really isn't designed for that. I would need to replace the table rows with Accordion components and have the table live inside a large Accordion component, which is really not optimal. So I moved on, even though I didn't delete the component (TableAccordion).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+I built a sidebar with a transition that allows the user to see the entire table, even when the sidebar is open. I didn't have implement data deletion or modification in the sidebar, mostly due to issues managing state. So, the data displays, but no actions can be taken on it, now. I nearly got the row data deletion working, but ran out of time fiddling with setState() trying to update my data object.
 
-## Learn More
+## Misc.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+There are some small things I could do to clean up the app, like extract EditableCell from the Table component, to its own component, but I wanted to submit this before too much time had passed.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+There are also a few small errors (unique key for a list and a DOM error) that would be easy to fix.
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+There is an icon on the left side of each cell which was intended to use to trigger the TableAccordion component (display row data in detail). Since I removed that component, the button is now useless. I left it because it demonstrates my vision of the UI.
