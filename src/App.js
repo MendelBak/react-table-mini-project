@@ -75,6 +75,7 @@ class App extends Component {
     });
   };
 
+  // TODO: This function does not work. See Readme for more details.
   clearRowData = (i) => {
     // console.log(this.state.data);
 
@@ -89,7 +90,7 @@ class App extends Component {
     //     data: newData,
     //   };
     // });
-    
+
     // let prevStateData = { ...this.state.data };
     // this.setState({...this.state.data, firstName: 'Mendel'});
     // let key = 2;
