@@ -9,25 +9,89 @@ import {
   Menu,
   Segment,
   Sidebar,
+  Form,
+  Container,
+  TextArea,
+  Divider,
+  Card,
+  SidebarPushable,
 } from 'semantic-ui-react';
 
-const VerticalSidebar = (props) => (
-  <Sidebar
-    as={Menu}
-    animation={props.animation}
-    direction={props.direction}
-    icon='labeled'
-    inverted
-    vertical
-    visible={props.visible}
-    width={props.width}
-  >
-    <Menu.Item as='a'>
-      <Icon name='camera' />
-      Channels
-    </Menu.Item>
-  </Sidebar>
-);
+function SlidingSidebar(props) {
+  function displayContent() {
+    return Object.values(props.sidebarContent).map((cell) => {
+      console.log('displayContent -> cell', cell);
+
+      return (
+        <Card
+          centered
+          raised
+          color='red'
+          key={`${cell.column.Header} ${cell.row.id}`}
+        >
+          <Card.Header as='h4' content={cell.column.Header} />
+          <Card.Content content={cell.value} />
+        </Card>
+      );
+    });
+  }
+
+  function clearRowData() {
+    props.clearRowData();
+  }
+
+  function hideSidebar() {
+    props.hideSidebar();
+  }
+  const [visible, setVisible] = React.useState(false);
+
+  return (
+    <>
+      <Sidebar
+        as={Menu}
+        style={{ background: 'grey' }}
+        animation={'scale down'}
+        direction={props.direction}
+        icon='labeled'
+        inverted
+        vertical
+        onHide={hideSidebar}
+        visible={props.visible}
+        width={props.width}
+      >
+        <Menu.Item as='a' onClick={clearRowData}>
+          <Icon name='delete' />
+          Clear All Row Data
+        </Menu.Item>
+
+        {displayContent()}
+      </Sidebar>
+    </>
+  );
+}
+
+// import React from 'react';
+
+// export default function SlidingSidebar() {
+//   return (
+//     <div style={{ marginTop: '100px' }} class='ui container'>
+//       <h2>Sidebar</h2>
+
+//       <button class='ui button primary'>Show Menu</button>
+
+//       <div
+//         class='ui sidebar inverted visible
+//                         vertical menu'
+//       >
+//         <h2 style={{ color: 'white' }}>Menu</h2>
+//         <a class='item'>Data Structure</a>
+//       </div>
+//       <div class='pusher'></div>
+
+//       <h2>Hello welcome to geeksforgeeks</h2>
+//     </div>
+//   );
+// }
 
 // function exampleReducer(state, action) {
 //   switch (action.type) {
@@ -102,4 +166,4 @@ const VerticalSidebar = (props) => (
 //   )
 // }
 
-export default VerticalSidebar;
+export default SlidingSidebar;
