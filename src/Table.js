@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTable } from 'react-table';
+
+// Internal Components
 import Card from './Card';
 
 const EditableCell = ({
@@ -35,7 +37,6 @@ const EditableCell = ({
   );
 };
 
-// Set our editable cell renderer as the default Cell renderer
 const defaultColumn = {
   Cell: EditableCell,
 };
@@ -88,14 +89,14 @@ export default function Table({ columns, data, showSidebar, toggleSidebar }) {
             return (
               <tr {...row.getRowProps()}>
                 <td
-                  class='collapsing'
+                  className='collapsing'
                   onClick={() => {
                     toggleSidebar(row);
                   }}
                 >
                   <i
                     aria-hidden='true'
-                    class=' ui fitted arrow down link icon'
+                    className=' ui fitted arrow down link icon'
                   ></i>
                 </td>
                 {row.cells.map((cell) => {

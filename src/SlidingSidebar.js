@@ -4,8 +4,6 @@ import { Menu, Sidebar, Card, Icon } from 'semantic-ui-react';
 function SlidingSidebar(props) {
   function displayContent() {
     return Object.values(props.sidebarContent).map((cell) => {
-      console.log('displayContent -> cell', cell);
-
       return (
         <Card
           centered
@@ -33,7 +31,7 @@ function SlidingSidebar(props) {
       <Sidebar
         as={Menu}
         style={{ background: 'grey' }}
-        animation={'overlay'}
+        animation={'scale down'}
         direction={props.direction}
         icon='labeled'
         inverted
@@ -42,7 +40,11 @@ function SlidingSidebar(props) {
         visible={props.visible}
         width={props.width}
       >
-        <Menu.Item as='a' onClick={clearRowData}>
+        <Menu.Item
+          as='a'
+          onClick={clearRowData}
+          style={{ background: 'black' }}
+        >
           <Icon name='delete' />
           Clear All Row Data
         </Menu.Item>

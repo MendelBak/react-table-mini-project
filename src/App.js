@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Sidebar } from 'semantic-ui-react';
+
+// Internal Components
 import SlidingSidebar from './SlidingSidebar';
 import Table from './Table';
-
 import makeData from './makeData';
-import { Sidebar } from 'semantic-ui-react';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -74,30 +75,30 @@ class App extends Component {
     });
   };
 
-  clearRowData = () => {
-    console.log('clear row data');
-    console.log(this.state.data);
+  clearRowData = (i) => {
+    // console.log(this.state.data);
 
-    // this.setState({
-    //   data[0].firstName = ''
-    // })
-
+    // this.setState(function (state, props) {
+    //   const newData = state.data.slice();
+    //   newData[i] = Object.keys(newData[i]).reduce(
+    //     (r, k) => ({ ...r, [k]: '' }),
+    //     {}
+    //   );
+    //   return {
+    //     ...state,
+    //     data: newData,
+    //   };
+    // });
+    
     // let prevStateData = { ...this.state.data };
-    // console.log('asdfa', prevStateData);
     // this.setState({...this.state.data, firstName: 'Mendel'});
-
     // let key = 2;
     // this.setState((prevState) => ({
     //   data: prevState.data.map(
-    //     ((el) => el.firstName: 'mendle')
+    //     ((el) => el.firstName: 'menachem)
     //     // el.key === key ? { ...el, firstName: 'done' } : el
     //   ),
     // }));
-
-    // var x = this.state.data[0].firstName;
-    // console.log(x);
-    // this.setState({ x: '' });
-    // console.log(this.state.data);
   };
 
   hideSidebar = () => {
